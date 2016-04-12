@@ -41,7 +41,7 @@ quantity | Ne | (number) Počet zakoupených kusů
 
 ## PHP
 
-Pokud je váš e-shop v PHP, můžete pro usnadnění použít třídu `ZboziKonverze.php`, kterou jsme pro vás připravili. Kód třídy, příklady použití a kompletní technickou dokumentaci k ní naleznete [zde](http://www.tohlenikamnevede.berlin/).
+Pokud je váš e-shop v PHP, můžete pro usnadnění použít třídu `ZboziKonverze.php`, kterou jsme pro vás připravili.
 
 Příklad použití:
 

@@ -5,7 +5,9 @@ include("ZboziKonverze.php");
 try {
 
     $zbozi = new ZboziKonverze(1234567890, "fedcba9876543210123456789abcdef");
-    $zbozi->useSandbox(true);
+    
+    // testovací režim
+    //$zbozi->useSandbox(true);
 
     $zbozi->addCartItem(array(
         "productName" => "Název položky",
@@ -22,7 +24,7 @@ try {
     ));
 
     $zbozi->setOrder(array(
-        "email" => "ferda@mraven.ec",
+        "email" => "jan.novak@example.com",
         "deliveryType" => "balik_do_ruky",
         "deliveryPrice" => 100,
         "deliveryDate" => "2016-02-01",

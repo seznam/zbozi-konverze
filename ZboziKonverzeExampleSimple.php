@@ -5,7 +5,10 @@ include("ZboziKonverze.php");
 try {
 
     $zbozi = new ZboziKonverze(1234567890, "fedcba9876543210123456789abcdef");
-    $zbozi->useSandbox(true);
+
+    // testovací režim
+    //$zbozi->useSandbox(true);
+
     $zbozi->setEmail('jan.novak@example.com');
     $zbozi->addOrderId(123456);
     $zbozi->addProductItemId('B1234');
