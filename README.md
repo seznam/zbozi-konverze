@@ -96,14 +96,18 @@ try {
 ?>
 ```
 
+## Alternativní moduly třetích stran
+
+* [soukicz/zbozicz](https://github.com/soukicz/zbozicz) – PHP s využitím namespaců a podporou asychronního odesílání objednávek
+
 ## Vlastní implementace
 
-V případě, že nemůžete použít připravenou PHP třídu, je nutné vytvořit vlastní implementaci.
+V případě, že nemůžete či nechcete použít některý z připravených modulů, je nutné vytvořit vlastní implementaci.
 
 Údaje o nákupu mohou být předány dvěma způsoby. Prvním a doporučovaným způsobem je zaslání HTTP POST requestu, jehož obsahem je JSON s údaji o nákupu. Druhou možností je zaslání HTTP GET requestu, ve kterém se údaje o nákupu serializují do URL parametrů.
 
 Request je nutné odeslat na adresu `https://www.zbozi.cz/action/SHOP_ID/conversion/backend`, kde `SHOP_ID` je unikátní po každý e-shop.
-Pro testování lze použít adresu `https://sandbox.zbozi.cz/action/TEST_ID/conversion/backend`, kde `TEST_ID` vám bude náhodně vygenerováno.
+Pro testování lze použít adresu `https://sandbox.zbozi.cz/action/TEST_ID/conversion/backend`, kde vám `TEST_ID` bude náhodně vygenerováno.
 
 > **Upozornění pro testovací režim:**
 >
