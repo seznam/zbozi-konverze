@@ -4,10 +4,11 @@ Pro získání výhod spojených s využíváním pokročilého měření konver
 
 ID eshopu a tajný API klíč získáte v [administraci vaší provozovny](https://admin.zbozi.cz), kde také *musíte schválit souhlas s obchodními podmínkami pro Pokročilé měření konverzí*.
 
-K dispozici je také [Nástroj pro ověření funkčnosti pokročilého měření konverzí (dále jen Sandbox)](http://sandbox.zbozi.cz) využívající testovací údaje.
+K dispozici je také [Nástroj pro ověření funkčnosti pokročilého měření konverzí (dále jen Sandbox)](http://sandbox.zbozi.cz) využívající testovací údaje. Další nápovědu naleznete v [Nápovědě Zboží](http://napoveda.seznam.cz/cz/zbozi/napoveda-pro-internetove-obchody/mereni-konverzi-internetoveho-obchodu-na-zbozicz/)
 
 
 ## Předávaná data
+S výjimkou PRIVATE_KEY lze všechny proměnné odeslat z frontendu i backendu, doporučujeme využít vždy obou metod, náš systém pak následně údaje spojí s pomocí společného orderId.
 
 ### Autentizace a autorizace
 Název proměnné | Povinný       | Popis
@@ -19,11 +20,11 @@ PRIVATE_KEY | Ano | (string) Tajný klíč využívaný výhradně pro autorizac
 
 Název proměnné | Povinný       | Popis
 :------------- | :------------ | :---------
-orderId | Ano | (string) Číslo objednávky vygenerované vaším e-shopem
-email | Ano* | (email) E-mail zákazníka (povinný pro získání přísupu k pokročilým statistikám)
-cart | Ne | Obsah nákupního košíku
+orderId | Ano | (string) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
+email | Ano* | (email) E-mail zákazníka. Může být využit pro ověření spokojenosti s nákupem a k žádosti o ohodnocení zakoupeného produktu. Povinný pro získání přístupu k pokročilým statistikám, nezasílat v případě, kdy zákazník neudělil souhlas s jeho poskytnutím.
+cart | Ano | (array) Obsah nákupního košíku
 deliveryType | Doporučený | (string) Způsob dopravy. Může být libovolný řetězec (např. Česká pošta, osobní odběr apod.). V administraci pak získáte agregované statistiky jednodlivých způsobů dopravy.
-deliveryDate | Doporučený | (yyyy-mm-dd) Datum, kdy má objednávka být předána dopravci nebo připravena k osobnímu odběru
+deliveryDate | Doporučený | (yyyy-mm-dd) Datum, kdy má objednávka být předána dopravci nebo připravena k osobnímu odběru  (je-li jich více termínů pro více položek, vyberte nejzazší či takový, ve kterém půjde nejvíce zboží)
 deliveryPrice | Doporučený | (number) Cena dopravy (bez ceny dobírky) v Kč včetně DPH
 paymentType | Doporučený | (string) Způsob platby. Může být libovolný řetězec (např. kartou, hotovost apod.).
 otherCosts | Doporučený | (number) Další náklady či slevy na objednávku, poplatek za dobírku, platbu kartou, instalace, množstevní sleva apod. Slevy jsou uvedeny jako záporné číslo.
@@ -33,10 +34,10 @@ totalPrice | Ne | (number) Celková cena objednávky v Kč včetně DPH. Pokud n
 
 Název proměnné | Povinný | Popis
 :------------- | :------ | :----
-itemId | Ne | (string) ID položky v e-shopu (ITEM_ID z feedu)
-productName | Ne | (string) Název položky, ideálně PRODUCTNAME z feedu
-unitPrice | Ne | (number) Jednotková cena položky v Kč včetně DPH
-quantity | Ne | (number) Počet zakoupených kusů
+itemId | Ano | (string) ID položky v e-shopu (ITEM_ID z feedu)
+productName | Ano | (string) Název položky, ideálně PRODUCTNAME z feedu
+unitPrice | Ano | (number) Jednotková cena položky v Kč včetně DPH
+quantity | Ano | (number) Počet zakoupených kusů
 
 
 ## PHP
