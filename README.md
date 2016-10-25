@@ -10,6 +10,8 @@ K dispozici je také [Nástroj pro ověření funkčnosti pokročilého měřen�
 ## Předávaná data
 S výjimkou PRIVATE_KEY lze všechny proměnné odeslat z frontendu i backendu, doporučujeme využít vždy obou metod, náš systém pak následně údaje spojí s pomocí společného orderId.
 
+Všechny textové údaje musí být v kódování `utf-8`. Znaky nepatřící do `utf-8` jsou při zpracování ignorovány.
+
 ### Autentizace a autorizace
 Název proměnné | Povinný       | Popis
 :------------- | :------------ | :---------
