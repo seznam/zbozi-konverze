@@ -27,10 +27,10 @@ email | Ano* | (email) E-mail zákazníka. Může být využit pro ověření sp
 cart | Ano | (array) Obsah nákupního košíku
 deliveryType | Doporučený | (string) Způsob dopravy. Může být libovolný řetězec (např. Česká pošta, osobní odběr apod.). V administraci pak získáte agregované statistiky jednodlivých způsobů dopravy.
 deliveryDate | Doporučený | (yyyy-mm-dd) Datum, kdy má objednávka být předána dopravci nebo připravena k osobnímu odběru. (je-li jich více termínů pro více položek, vyberte nejzazší či takový, ve kterém půjde nejvíce zboží)
-deliveryPrice | Doporučený | (number) Cena dopravy (bez ceny dobírky) v Kč včetně DPH. (Znaménkový 32bitový integer, -2<sup>31</sup> – 2<sup>31</sup>-1.)
+deliveryPrice | Doporučený | (number) Cena dopravy (bez ceny dobírky) v Kč včetně DPH. (Znaménkový 32bitový integer, -2<sup>31</sup> – (2<sup>31</sup>-1).)
 paymentType | Doporučený | (string) Způsob platby. Může být libovolný řetězec (např. kartou, hotovost apod.).
-otherCosts | Doporučený | (number) Další náklady či slevy na objednávku, poplatek za dobírku, platbu kartou, instalace, množstevní sleva apod. Slevy jsou uvedeny jako záporné číslo. (Znaménkový 32bitový integer, -2<sup>31</sup> – 2<sup>31</sup>-1.)
-totalPrice | Ne | (number) Celková cena objednávky v Kč včetně DPH. Pokud není uvedena, či je nulová, bude vypočítána jako součet ceny nákupního košíku, ceny dopravy a dalších nákladů na objednávku. (0 – 2<sup>31</sup>-1.)
+otherCosts | Doporučený | (number) Další náklady či slevy na objednávku, poplatek za dobírku, platbu kartou, instalace, množstevní sleva apod. Slevy jsou uvedeny jako záporné číslo. (Znaménkový 32bitový integer, -2<sup>31</sup> – (2<sup>31</sup>-1).)
+totalPrice | Ne | (number) Celková cena objednávky v Kč včetně DPH. Pokud není uvedena, či je nulová, bude vypočítána jako součet ceny nákupního košíku, ceny dopravy a dalších nákladů na objednávku. (0 – (2<sup>31</sup>-1).)
 
 ### Vlastnosti jednotlivých položek košíku (obsah proměnné "cart")
 
@@ -38,8 +38,8 @@ Název proměnné | Povinný | Popis
 :------------- | :------ | :----
 itemId | Ano | (string) ID položky v e-shopu (ITEM_ID z feedu)
 productName | Ano | (string) Název položky, ideálně PRODUCTNAME z feedu
-unitPrice | Ano | (number) Jednotková cena položky v Kč včetně DPH. (1 – 2<sup>31</sup>-1.)
-quantity | Ano | (number) Počet zakoupených kusů. (1 – 2<sup>31</sup>-1.)
+unitPrice | Ano | (number) Jednotková cena položky v Kč včetně DPH. (1 – (2<sup>31</sup>-1).)
+quantity | Ano | (number) Počet zakoupených kusů. (1 – (2<sup>31</sup>-1).)
 
 
 ## PHP
