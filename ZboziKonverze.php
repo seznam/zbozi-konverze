@@ -81,6 +81,7 @@ class ZboziKonverze {
 
     /**
      * Customer email
+     * Should not be set unless customer allows to do so.
      *
      * @var string $email
      */
@@ -283,7 +284,9 @@ class ZboziKonverze {
      * @param array $orderAttributes Array of various order attributes
      */
     public function setOrder($orderAttributes) {
-        $this->email = $orderAttributes["email"];
+        if (array_key_exists("email", $orderAttributes)) {
+            $this->email = $orderAttributes["email"];
+        }
         $this->deliveryType = $orderAttributes["deliveryType"];
         $this->deliveryPrice = $orderAttributes["deliveryPrice"];
         $this->deliveryDate = $orderAttributes["deliveryDate"];
@@ -322,7 +325,7 @@ class ZboziKonverze {
         }
 
         $decoded_response = json_decode($response, true);
-        if ($decoded_response["status"] == 200) {
+        if ((int)($decoded_response["status"] / 100) === 2) {
             return true;
         } else {
             throw new ZboziKonverzeException('Request was not accepted.');

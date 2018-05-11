@@ -23,7 +23,7 @@ PRIVATE_KEY | Ano | (string) Tajný klíč využívaný výhradně pro autorizac
 Název proměnné | Povinný       | Popis
 :------------- | :------------ | :---------
 orderId | Ano | (string) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
-email | Ano* | (email) E-mail zákazníka. Může být využit pro ověření spokojenosti s nákupem a k žádosti o ohodnocení zakoupeného produktu. Povinný pro získání přístupu k pokročilým statistikám, nezasílat v případě, kdy zákazník neudělil souhlas s jeho poskytnutím.
+email | Ne | (email) E-mail zákazníka. Může být využit pro ověření spokojenosti s nákupem a k žádosti o ohodnocení zakoupeného produktu. Nezasílat v případě, kdy zákazník neudělil souhlas s jeho poskytnutím.
 cart | Ano | (array) Obsah nákupního košíku
 deliveryType | Doporučený | (string) Způsob dopravy. Může být libovolný řetězec (např. Česká pošta, osobní odběr apod.). V administraci pak získáte agregované statistiky jednodlivých způsobů dopravy.
 deliveryDate | Doporučený | (yyyy-mm-dd) Datum, kdy má objednávka být předána dopravci nebo připravena k osobnímu odběru. (je-li jich více termínů pro více položek, vyberte nejzazší či takový, ve kterém půjde nejvíce zboží)
