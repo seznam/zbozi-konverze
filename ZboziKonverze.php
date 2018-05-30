@@ -309,18 +309,21 @@ class ZboziKonverze {
     {
         $encoded_json = json_encode(get_object_vars($this));
 
-        // use key 'http' even if you send the request to https://...
-        $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/json",
-                'method'  => 'POST',
-                'content' => $encoded_json,
-            ),
-        );
-        $context  = stream_context_create($options);
-        $response = file_get_contents($url, false, $context);
+		$ch = curl_init();
+		$timeout = 5;
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $encoded_json);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+		$response = curl_exec($ch);
 
-        if ($response === false) {
+		if (curl_errno($ch) != 0) {
+			throw new ZboziKonverzeException(curl_error($ch));
+		}
+
+		if ($response === false) {
             throw new ZboziKonverzeException('Unable to establish connection to ZboziKonverze service');
         }
 
