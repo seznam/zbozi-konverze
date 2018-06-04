@@ -25,7 +25,7 @@ Název proměnné | Povinný       | Popis
 orderId | Ano | (string) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
 email | Ne | (email) E-mail zákazníka. Může být využit pro ověření spokojenosti s nákupem a k žádosti o ohodnocení zakoupeného produktu. Nezasílat v případě, kdy zákazník neudělil souhlas s jeho poskytnutím.
 cart | Ano | (array) Obsah nákupního košíku
-deliveryType | Doporučený | (string) Způsob dopravy. Může být libovolný řetězec (např. Česká pošta, osobní odběr apod.). V administraci pak získáte agregované statistiky jednodlivých způsobů dopravy.
+deliveryType | Doporučený | (string) Způsob dopravy, pokud možno [DELIVERY_ID z feedu](https://napoveda.seznam.cz/cz/zbozi/specifikace-xml-pro-obchody/specifikace-xml-feedu/#DELIVERY)
 deliveryDate | Doporučený | (yyyy-mm-dd) Datum, kdy má objednávka být předána dopravci nebo připravena k osobnímu odběru. (je-li jich více termínů pro více položek, vyberte nejzazší či takový, ve kterém půjde nejvíce zboží)
 deliveryPrice | Doporučený | (number) Cena dopravy (bez ceny dobírky) v Kč včetně DPH. (Znaménkový 32bitový integer, -2<sup>31</sup>/100 – (2<sup>31</sup>-1)/100.)
 paymentType | Doporučený | (string) Způsob platby. Může být libovolný řetězec (např. kartou, hotovost apod.).
@@ -44,7 +44,7 @@ quantity | Ano | (number) Počet zakoupených kusů. (1 – (2<sup>31</sup>-1).)
 
 ## PHP
 
-Pokud je váš e-shop v PHP, můžete pro usnadnění použít třídu `ZboziKonverze.php`, kterou jsme pro vás připravili.
+Pokud je váš e-shop v PHP, můžete pro usnadnění použít třídu `ZboziKonverze.php`, kterou jsme pro vás připravili. Pokud něco nefunguje jak má (to mohou být třeba potíže na síti, nebo stav kdy e-shop pokročilé měření konverzí vypnul v administraci Zboží), vyhazuje třída výjimky. Výjimky doporučujeme zpracovávat nebo alespoň odchytávat, aby nenarušily zpracování objednávky.
 
 Příklad použití:
 
@@ -63,7 +63,7 @@ try {
 
     // nastavení informací o objednávce
     $zbozi->setOrder(array(
-        "deliveryType" => "Česká pošta (do ruky)",
+        "deliveryType" => "CESKA_POSTA",
         "deliveryDate" => "2016-02-29",
         "deliveryPrice" => 80,
         "email" => "email@example.com",
@@ -93,7 +93,8 @@ try {
     $zbozi->send();
 
 } catch (ZboziKonverzeException $e) {
-    print "Error: " . $e->getMessage();
+    // zalogování případné chyby
+    error_log("Chyba konverze: " . $e->getMessage());
 }
 
 ?>
@@ -132,7 +133,7 @@ Content-Type: application/json
     "sandbox": false,
     "orderId": "2016007896",
     "email": "email@example.com",
-    "deliveryType": "Česká pošta (do ruky)",
+    "deliveryType": "CESKA_POSTA",
     "deliveryDate": "2016-02-29",
     "deliveryPrice": 80,
     "paymentType": "dobírka",
@@ -184,7 +185,7 @@ je nutné vyjádřit jako:
 
 Příklad requestu:
 
-`https://www.zbozi.cz/action/1234567890/conversion/backend?orderId=2016007896&PRIVATE_KEY=fedcba9876543210123456789abcdef&deliveryType=%C4%8Cesk%C3%A1+po%C5%A1ta+%28do+ruky%29&paymentType=dob%C3%ADrka&deliveryDate=2016-02-29&email=email%40example.com&cart=itemId:1357902468;quantity:1;unitPrice:5000.5;productName:Samsung+Galaxy+S3+%28i9300%29&cart=itemId:2468013579;quantity:4;unitPrice:600;productName:BARUM+QUARTARIS+165%2F70+R14+81+T`
+`https://www.zbozi.cz/action/1234567890/conversion/backend?orderId=2016007896&PRIVATE_KEY=fedcba9876543210123456789abcdef&deliveryType=CESKA_POSTA&paymentType=dob%C3%ADrka&deliveryDate=2016-02-29&email=email%40example.com&cart=itemId:1357902468;quantity:1;unitPrice:5000.5;productName:Samsung+Galaxy+S3+%28i9300%29&cart=itemId:2468013579;quantity:4;unitPrice:600;productName:BARUM+QUARTARIS+165%2F70+R14+81+T`
 
 
 

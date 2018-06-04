@@ -13,7 +13,7 @@
  *
  *     // Set order details
  *     $zbozi->setOrder(array(
- *         "deliveryType" => "Česká pošta (do ruky)",
+ *         "deliveryType" => "CESKA_POSTA",
  *         "deliveryDate" => "2016-02-29",
  *         "deliveryPrice" => 80,
  *         "email" => "email@example.com",
@@ -42,8 +42,8 @@
  *     $zbozi->send();
  *
  * } catch (ZboziKonverzeException $e) {
- *     // Error should be handled
- *     print "Error: " . $e->getMessage();
+ *     // Error should be handled according to your preference
+ *     error_log("Chyba konverze: " . $e->getMessage());
  * }
  * \endcode
  *
@@ -284,7 +284,7 @@ class ZboziKonverze {
      * @param array $orderAttributes Array of various order attributes
      */
     public function setOrder($orderAttributes) {
-        if (array_key_exists("email", $orderAttributes)) {
+        if (array_key_exists("email", $orderAttributes) && $orderAttributes["email"]) {
             $this->email = $orderAttributes["email"];
         }
         $this->deliveryType = $orderAttributes["deliveryType"];
@@ -308,27 +308,45 @@ class ZboziKonverze {
     protected function sendRequest($url)
     {
         $encoded_json = json_encode(get_object_vars($this));
+        
+        if (extension_loaded('curl'))
+        {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3 /* seconds */);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $encoded_json);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            $response = curl_exec($ch);
 
-        // use key 'http' even if you send the request to https://...
-        $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/json",
-                'method'  => 'POST',
-                'content' => $encoded_json,
-            ),
-        );
-        $context  = stream_context_create($options);
-        $response = file_get_contents($url, false, $context);
+            if ($response === false) {
+                throw new ZboziKonverzeException('Unable to establish connection to ZboziKonverze service: ' . curl_error($ch));
+            }
+        }
+        else
+        {
+            // use key 'http' even if you send the request to https://...
+            $options = array(
+                'http' => array(
+                    'header'  => "Content-type: application/json",
+                    'method'  => 'POST',
+                    'content' => $encoded_json,
+                ),
+            );
+            $context  = stream_context_create($options);
+            $response = file_get_contents($url, false, $context);
 
-        if ($response === false) {
-            throw new ZboziKonverzeException('Unable to establish connection to ZboziKonverze service');
+            if ($response === false) {
+                throw new ZboziKonverzeException('Unable to establish connection to ZboziKonverze service');
+            }
         }
 
         $decoded_response = json_decode($response, true);
         if ((int)($decoded_response["status"] / 100) === 2) {
             return true;
         } else {
-            throw new ZboziKonverzeException('Request was not accepted.');
+            throw new ZboziKonverzeException('Request was not accepted: ' . $decoded_response['statusMessage']);
         }
     }
 

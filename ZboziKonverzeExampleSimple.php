@@ -17,7 +17,5 @@ try {
 
 } catch (ZboziKonverzeException $e) {
     // handle errors
-    print "Error: " . $e->getMessage();
+    error_log("Chyba konverze: " . $e->getMessage());
 }
-
-?>
