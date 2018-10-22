@@ -308,7 +308,7 @@ class ZboziKonverze {
     protected function sendRequest($url)
     {
         $encoded_json = json_encode(get_object_vars($this));
-        
+
         if (extension_loaded('curl'))
         {
             $ch = curl_init();
@@ -317,7 +317,7 @@ class ZboziKonverze {
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3 /* seconds */);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $encoded_json);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
             $response = curl_exec($ch);
 
             if ($response === false) {
