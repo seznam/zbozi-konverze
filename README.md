@@ -4,7 +4,7 @@ Pro získání výhod spojených s měřením konverzí Zboží.cz, jakými jsou
 
 Pro autentizaci a autorizaci se využívá ID provozovny a tajný klíč. Tyto údaje získáte v [administraci](https://admin.zbozi.cz), kde je také třeba schválit souhlas se smluvními podmínkami pro měření konverzí a uzavřít dohodu o zpracování osobních údajů.
 
-Pro odladění a ověření funkčnosti své implementace měření konverzí můžete využít testovací prostředí - [Sandbox](http://sandbox.zbozi.cz). K dispozici je vám i [nápověda Zboží.cz](http://napoveda.seznam.cz/cz/zbozi/napoveda-pro-internetove-obchody/mereni-konverzi-internetoveho-obchodu-na-zbozicz/)
+Pro odladění a ověření funkčnosti své implementace měření konverzí můžete využít testovací prostředí – [Sandbox](http://sandbox.zbozi.cz). K dispozici je vám i [nápověda Zboží.cz](http://napoveda.seznam.cz/cz/zbozi/napoveda-pro-internetove-obchody/mereni-konverzi-internetoveho-obchodu-na-zbozicz/)
 
 
 ## Předávaná data
@@ -19,6 +19,8 @@ SHOP_ID | Ano | (int) ID provozovny, získáte v [administraci své provozovny](
 orderId | Ano | (string, maximum 255 znaků) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
 
 ### Konverzní JavaScript kód
+
+Frontend kód by měl být na stránce zobrazující se po odeslání/potvrzení objednávky a jeho optimální umístění je do hlavičky stránky (před `</head>`) – volání skriptu je prováděno asynchronně, nezpomalí tak načítání jiných prvků na stránce. 
 
 ```html
 <script>
