@@ -1,50 +1,81 @@
-# Pokročilé měření konverzí Zboží.cz
+# Měření konverzí Zboží.cz
 
-Pro získání výhod spojených s využíváním pokročilého měření konverzí Zboží.cz, jakými jsou např. rozšířené statistiky o konverzích, pozicích a návratnosti investic, je třeba rozšířit a autorizovat informace ze základního (JavaScript) měřícího kódu  pomocí ověřeného požadavku z vašeho backend rozhraní.
+Pro získání výhod spojených s měřením konverzí Zboží.cz, jakými jsou např. zjišťování spokojenosti zákazníků s nákupem nebo přístup ke statistikám výkonu přes API, je třeba zasílat informace z frontend měřícího kódu (JavaScript) i z vašeho backend rozhraní.
 
-ID eshopu a tajný API klíč získáte v [administraci vaší provozovny](https://admin.zbozi.cz), kde také *musíte schválit souhlas s obchodními podmínkami pro Pokročilé měření konverzí*.
+Pro autentizaci a autorizaci se využívá ID provozovny a tajný klíč. Tyto údaje získáte v [administraci](https://admin.zbozi.cz), kde je také třeba schválit souhlas se smluvními podmínkami pro měření konverzí a uzavřít dohodu o zpracování osobních údajů.
 
-K dispozici je také [Nástroj pro ověření funkčnosti pokročilého měření konverzí (dále jen Sandbox)](http://sandbox.zbozi.cz) využívající testovací údaje. Další nápovědu naleznete v [Nápovědě Zboží](http://napoveda.seznam.cz/cz/zbozi/napoveda-pro-internetove-obchody/mereni-konverzi-internetoveho-obchodu-na-zbozicz/)
+Pro odladění a ověření funkčnosti své implementace měření konverzí můžete využít testovací prostředí - [Sandbox](http://sandbox.zbozi.cz). K dispozici je vám i [nápověda Zboží.cz](http://napoveda.seznam.cz/cz/zbozi/napoveda-pro-internetove-obchody/mereni-konverzi-internetoveho-obchodu-na-zbozicz/)
 
 
 ## Předávaná data
-S výjimkou PRIVATE_KEY lze všechny proměnné odeslat z frontendu i backendu, doporučujeme využít vždy obou metod, náš systém pak následně údaje spojí s pomocí společného orderId.
-
+Z důvodu zabezpečení a spolehlivosti dat je třeba odeslat údaje z frontendu i backendu, náš systém pak následně data spojí přes společné orderId.
 Všechny textové údaje musí být v kódování `utf-8`. Znaky nepatřící do `utf-8` jsou při zpracování ignorovány.
+
+## Frontend
+
+Název proměnné | Povinný       | Popis
+:------------- | :------------ | :---------
+SHOP_ID | Ano | (int) ID provozovny, získáte v [administraci své provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu.
+orderId | Ano | (string, maximum 255 znaků) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
+
+### Konverzní JavaScript kód
+
+```html
+<script>
+  (function(w,d,s,u,n,k,c,t){w.ZboziConversionObject=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments)};w[n].key=k;c=d.createElement(s);
+    t=d.getElementsByTagName(s)[0];c.async=1;c.src=u;t.parentNode.insertBefore(c,t)
+  })(window,document,"script","https://www.zbozi.cz/conversion/js/conv-v3.js","zbozi","ID PROVOZOVNY");
+
+  // zapnutí testovacího režimu
+  // zbozi("useSandbox");
+
+  // nastavení informací o objednávce
+  zbozi("setOrder",{
+    "orderId": "CISLO OBJEDNAVKY"
+  });
+
+  // odeslání
+  zbozi("send");
+</script>
+```
+
+> **Upozornění:**
+>
+> Tento JavaScript kód je určen pouze pro standardní měření konverzí.
+
+## Backend
 
 ### Autentizace a autorizace
 Název proměnné | Povinný       | Popis
 :------------- | :------------ | :---------
-SHOP_ID | Ano | (int &#124; string) ID provozovny, získáte v [administraci vaší provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu. Toto ID se využívá ve frontend (JavaScript) i backend kódu.
-PRIVATE_KEY | Ano | (string) Tajný klíč využívaný výhradně pro autorizaci požadavků z backendu, získáte také v [administraci vaší provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu. Při prozrazení tohoto kódu si vygenerujte nový.
+SHOP_ID | Ano | (int) ID provozovny, získáte v [administraci své provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu.
+PRIVATE_KEY | Ano | (string, maximum 255 znaků) Tajný klíč využívaný výhradně pro autorizaci požadavků z backendu, získáte také v [administraci své provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu. Při prozrazení tohoto kódu si vygenerujte nový.
 
-### Společné vlastnosti objednávky
+### Vlastnosti objednávky
 
 Název proměnné | Povinný       | Popis
 :------------- | :------------ | :---------
-orderId | Ano | (string) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
-email | Ne | (email) E-mail zákazníka. Může být využit pro ověření spokojenosti s nákupem a k žádosti o ohodnocení zakoupeného produktu. Nezasílat v případě, kdy zákazník neudělil souhlas s jeho poskytnutím.
-cart | Ano | (array) Obsah nákupního košíku
-deliveryType | Doporučený | (string) Způsob dopravy, pokud možno [DELIVERY_ID z feedu](https://napoveda.seznam.cz/cz/zbozi/specifikace-xml-pro-obchody/specifikace-xml-feedu/#DELIVERY)
-deliveryDate | Doporučený | (yyyy-mm-dd) Datum, kdy má objednávka být předána dopravci nebo připravena k osobnímu odběru. (je-li jich více termínů pro více položek, vyberte nejzazší či takový, ve kterém půjde nejvíce zboží)
-deliveryPrice | Doporučený | (number) Cena dopravy (bez ceny dobírky) v Kč včetně DPH. (Znaménkový 32bitový integer, -2<sup>31</sup>/100 – (2<sup>31</sup>-1)/100.)
-paymentType | Doporučený | (string) Způsob platby. Může být libovolný řetězec (např. kartou, hotovost apod.).
-otherCosts | Doporučený | (number) Další náklady či slevy na objednávku, poplatek za dobírku, platbu kartou, instalace, množstevní sleva apod. Slevy jsou uvedeny jako záporné číslo. (Znaménkový 32bitový integer, -2<sup>31</sup>/100 – (2<sup>31</sup>-1)/100.)
-totalPrice | Ne | (number) Celková cena objednávky v Kč včetně DPH. Pokud není uvedena, či je nulová, bude vypočítána jako součet ceny nákupního košíku, ceny dopravy a dalších nákladů na objednávku. (0 – (2<sup>31</sup>-1)/100.)
+orderId | Ano | (string, maximum 255 znaků) Číslo objednávky vygenerované e-shopem. Je třeba, aby se shodovalo u dat zaslaných z frontendu i backendu, aby mohlo dojít k jejich spojení.
+email | Doporučený | (email, maximum 100 znaků) E-mail zákazníka. Může být využit pro ověření spokojenosti s nákupem a k žádosti o ohodnocení zakoupeného produktu. Nezasílat v případě, kdy zákazník neudělil souhlas s jeho poskytnutím.
+cart | Ano | (array) Obsah nákupního košíku.
+deliveryType | Doporučený | (string, maximum 100 znaků) Způsob dopravy, pokud možno [DELIVERY_ID z feedu](https://napoveda.seznam.cz/cz/zbozi/specifikace-xml-pro-obchody/specifikace-xml-feedu/#DELIVERY)
+deliveryPrice | Doporučený | (number) Cena dopravy v Kč včetně DPH. (Znaménkový 32bitový integer, 0 – (2<sup>31</sup>-1)/100.)
+otherCosts | Doporučený | (number) Další náklady či slevy na objednávku, platbu kartou, instalace, množstevní sleva apod. Slevy jsou uvedeny jako záporné číslo. (Znaménkový 32bitový integer, -2<sup>31</sup>/100 – (2<sup>31</sup>-1)/100.)
+paymentType | Ne | (string, maximum 100 znaků) Způsob platby. Může být libovolný řetězec (např. kartou, hotovost apod.).
 
 ### Vlastnosti jednotlivých položek košíku (obsah proměnné "cart")
 
 Název proměnné | Povinný | Popis
 :------------- | :------ | :----
-itemId | Ano | (string) ID položky v e-shopu (ITEM_ID z feedu)
-productName | Ano | (string) Název položky, ideálně PRODUCTNAME z feedu
-unitPrice | Ano | (number) Jednotková cena položky v Kč včetně DPH. (1 – (2<sup>31</sup>-1).)
-quantity | Ano | (number) Počet zakoupených kusů. (1 – (2<sup>31</sup>-1).)
+itemId | Ano | (string, maximum 255 znaků) ID položky v e-shopu (ITEM_ID z feedu)
+productName | Ano | (string, maximum 255 znaků) Název položky, ideálně PRODUCTNAME z feedu
+unitPrice | Doporučený | (number) Jednotková cena položky v Kč včetně DPH. (0 – (2<sup>31</sup>-1).)
+quantity | Doporučený | (number) Počet zakoupených kusů. (1 – (2<sup>31</sup>-1).)
 
+### PHP
 
-## PHP
-
-Pokud je váš e-shop v PHP, můžete pro usnadnění použít třídu `ZboziKonverze.php`, kterou jsme pro vás připravili. Pokud něco nefunguje jak má (to mohou být třeba potíže na síti, nebo stav kdy e-shop pokročilé měření konverzí vypnul v administraci Zboží), vyhazuje třída výjimky. Výjimky doporučujeme zpracovávat nebo alespoň odchytávat, aby nenarušily zpracování objednávky.
+Pokud je váš e-shop v PHP, můžete pro usnadnění použít třídu `ZboziKonverze.php`, kterou jsme pro vás připravili. Pokud něco nefunguje jak má (třeba při potížích na síti, nebo když e-shop měření konverzí vypne v administraci Zboží), vyhazuje třída výjimky. Výjimky doporučujeme zpracovávat nebo alespoň odchytávat, aby nenarušily zpracování objednávky.
 
 Příklad použití:
 
@@ -56,21 +87,19 @@ include_once("ZboziKonverze.php");
 try {
 
     // inicializace
-    $zbozi = new ZboziKonverze(1234567890, "fedcba9876543210123456789abcdef");
+    $zbozi = new ZboziKonverze(ID PROVOZOVNY, "TAJNY KLIC");
 
     // testovací režim
     //$zbozi->useSandbox(true);
 
     // nastavení informací o objednávce
     $zbozi->setOrder(array(
-        "deliveryType" => "CESKA_POSTA",
-        "deliveryDate" => "2016-02-29",
-        "deliveryPrice" => 80,
+        "orderId" => "CISLO OBJEDNAVKY",
         "email" => "email@example.com",
-        "orderId" => "2016-007896",
+        "deliveryType" => "CESKA_POSTA",
+        "deliveryPrice" => 80,
         "otherCosts" => 20,
         "paymentType" => "dobírka",
-        "totalPrice" => 7500.50  //1×5000.50 + 4×600 + 80 + 20
     ));
 
     // přidáni zakoupené položky
@@ -100,17 +129,17 @@ try {
 ?>
 ```
 
-## Alternativní moduly třetích stran
+### Alternativní moduly třetích stran
 
 * [soukicz/zbozicz](https://github.com/soukicz/zbozicz) – PHP s využitím namespaců a podporou asychronního odesílání objednávek
 
-## Vlastní implementace
+### Vlastní implementace
 
 V případě, že nemůžete či nechcete použít některý z připravených modulů, je nutné vytvořit vlastní implementaci.
 
 Údaje o nákupu mohou být předány dvěma způsoby. Prvním a doporučovaným způsobem je zaslání HTTP POST requestu, jehož obsahem je JSON s údaji o nákupu. Druhou možností je zaslání HTTP GET requestu, ve kterém se údaje o nákupu serializují do URL parametrů.
 
-Request je nutné odeslat na adresu `https://www.zbozi.cz/action/SHOP_ID/conversion/backend`, kde `SHOP_ID` je unikátní po každý e-shop.
+Request je nutné odeslat na adresu `https://www.zbozi.cz/action/SHOP_ID/conversion/backend`, kde `SHOP_ID` je unikátní pro každý e-shop.
 Pro testování lze použít adresu `https://sandbox.zbozi.cz/action/TEST_ID/conversion/backend`, kde vám `TEST_ID` bude náhodně vygenerováno.
 
 > **Upozornění pro testovací režim:**
@@ -122,23 +151,21 @@ Pro testování lze použít adresu `https://sandbox.zbozi.cz/action/TEST_ID/con
 Příklad requestu:
 
 ```
-POST /action/1234567890/conversion/backend HTTP/1.1
+POST /action/ID PROVOZOVNY/conversion/backend HTTP/1.1
 Host: www.zbozi.cz
 Content-Length: 688
 Content-Type: application/json
 
 
 {
-    "PRIVATE_KEY": "fedcba9876543210123456789abcdef",
+    "PRIVATE_KEY": "TAJNY KLIC",
     "sandbox": false,
-    "orderId": "2016007896",
+    "orderId": "CISLO OBJEDNAVKY",
     "email": "email@example.com",
     "deliveryType": "CESKA_POSTA",
-    "deliveryDate": "2016-02-29",
     "deliveryPrice": 80,
     "paymentType": "dobírka",
     "otherCosts": 20,
-    "totalPrice": 7500.50,
     "cart": [
         {
             "itemId": "1357902468",
@@ -185,7 +212,4 @@ je nutné vyjádřit jako:
 
 Příklad requestu:
 
-`https://www.zbozi.cz/action/1234567890/conversion/backend?orderId=2016007896&PRIVATE_KEY=fedcba9876543210123456789abcdef&deliveryType=CESKA_POSTA&paymentType=dob%C3%ADrka&deliveryDate=2016-02-29&email=email%40example.com&cart=itemId:1357902468;quantity:1;unitPrice:5000.5;productName:Samsung+Galaxy+S3+%28i9300%29&cart=itemId:2468013579;quantity:4;unitPrice:600;productName:BARUM+QUARTARIS+165%2F70+R14+81+T`
-
-
-
+`https://www.zbozi.cz/action/ID PROVOZOVNY/conversion/backend?orderId=CISLO OBJEDNAVKY&PRIVATE_KEY=TAJNY KLIC&deliveryType=CESKA_POSTA&paymentType=dob%C3%ADrka&email=email%40example.com&cart=itemId:1357902468;quantity:1;unitPrice:5000.5;productName:Samsung+Galaxy+S3+%28i9300%29&cart=itemId:2468013579;quantity:4;unitPrice:600;productName:BARUM+QUARTARIS+165%2F70+R14+81+T`

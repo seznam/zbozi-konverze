@@ -9,18 +9,16 @@
  * \code
  * try {
  *     // Initialize
- *     $zbozi = new ZboziKonverze(1234567890, "fedcba9876543210123456789abcdef");
+ *     $zbozi = new ZboziKonverze(ID PROVOZOVNY, "TAJNY KLIC");
  *
  *     // Set order details
  *     $zbozi->setOrder(array(
- *         "deliveryType" => "CESKA_POSTA",
- *         "deliveryDate" => "2016-02-29",
- *         "deliveryPrice" => 80,
+ *         "orderId" => "CISLO OBJEDNAVKY",
  *         "email" => "email@example.com",
- *         "orderId" => "2016-007896",
+ *         "deliveryType" => "CESKA_POSTA",
+ *         "deliveryPrice" => 80,
  *         "otherCosts" => 20,
  *         "paymentType" => "dobírka",
- *         "totalPrice" => 7500.50  //1×5000.50 + 4×600 + 80 + 20
  *     ));
  *
  *     // Add bought items
@@ -95,13 +93,6 @@ class ZboziKonverze {
     public $deliveryType;
 
     /**
-     * Promised day of delivery
-     *
-     * @var string $deliveryDate
-     */
-    public $deliveryDate;
-
-    /**
      * Cost of delivery (in CZK)
      *
      * @var float $deliveryPrice
@@ -121,13 +112,6 @@ class ZboziKonverze {
      * @var string $otherCosts
      */
     public $otherCosts;
-
-    /**
-     * Total price of this order (in CZK)
-     *
-     * @var float $totalPrice
-     */
-    public $totalPrice;
 
     /**
      * Array of CartItem
@@ -260,26 +244,13 @@ class ZboziKonverze {
     }
 
     /**
-     * Adds total price (in CZK)
-     *
-     * @param float $totalPrice Total price of the order
-     */
-    public function addTotalPrice($totalPrice)
-    {
-        $this->totalPrice = $totalPrice;
-    }
-
-
-    /**
      * Sets order attributes within
      * \p email ,
      * \p deliveryType ,
      * \p deliveryPrice ,
-     * \p deliveryDate ,
      * \p orderId ,
      * \p otherCosts ,
      * \p paymentType ,
-     * \p totalPrice
      *
      * @param array $orderAttributes Array of various order attributes
      */
@@ -289,11 +260,9 @@ class ZboziKonverze {
         }
         $this->deliveryType = $orderAttributes["deliveryType"];
         $this->deliveryPrice = $orderAttributes["deliveryPrice"];
-        $this->deliveryDate = $orderAttributes["deliveryDate"];
         $this->orderId = $orderAttributes["orderId"];
         $this->otherCosts = $orderAttributes["otherCosts"];
         $this->paymentType = $orderAttributes["paymentType"];
-        $this->totalPrice = $orderAttributes["totalPrice"];
     }
 
 

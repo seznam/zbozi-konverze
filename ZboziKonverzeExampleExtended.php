@@ -27,11 +27,9 @@ try {
         "email" => "jan.novak@example.com",
         "deliveryType" => "balik_do_ruky",
         "deliveryPrice" => 100,
-        "deliveryDate" => "2016-02-01",
         "orderId" => 123456,
         "otherCosts" => 5.33,
         "paymentType" => "prevodem_z_uctu",
-        "totalPrice" => 1155.33,
     ));
 
     $zbozi->send();
