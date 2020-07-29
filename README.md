@@ -15,8 +15,8 @@ Všechny textové údaje musí být v kódování `utf-8`. Znaky nepatřící do
 
 Název proměnné | Povinný       | Popis
 :------------- | :------------ | :---------
-SHOP_ID | Ano | (int) ID provozovny, získáte v [administraci své provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu.
-orderId | Ano | (string, maximum 255 znaků) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
+seznam_zboziId | Ano | (int) ID provozovny, získáte v [administraci své provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu.
+seznam_orderId | Ano | (string, maximum 255 znaků) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
 
 ### Konverzní JavaScript kód
 
@@ -24,27 +24,13 @@ Frontend kód by měl být na stránce zobrazující se po odeslání/potvrzení
 
 ```html
 <script>
-  (function(w,d,s,u,n,k,c,t){w.ZboziConversionObject=n;w[n]=w[n]||function(){
-    (w[n].q=w[n].q||[]).push(arguments)};w[n].key=k;c=d.createElement(s);
-    t=d.getElementsByTagName(s)[0];c.async=1;c.src=u;t.parentNode.insertBefore(c,t)
-  })(window,document,"script","https://www.zbozi.cz/conversion/js/conv-v3.js","zbozi","ID PROVOZOVNY");
-
-  // zapnutí testovacího režimu
-  // zbozi("useSandbox");
-
-  // nastavení informací o objednávce
-  zbozi("setOrder",{
-    "orderId": "CISLO OBJEDNAVKY"
-  });
-
-  // odeslání
-  zbozi("send");
+    var seznam_zboziId = ID_PROVOZOVNY; // ID provozovny na Zboží
+    var seznam_orderId = "CISLO OBJEDNAVKY";  // Číslo objednávky
+    // var seznam_zboziType = "sandbox"; // zapnutí testovacího režimu
 </script>
-```
 
-> **Upozornění:**
->
-> Tento JavaScript kód je určen pouze pro standardní měření konverzí.
+<script type="text/javascript" src="https://www.seznam.cz/rs/static/rc.js" async></script>
+```
 
 ## Backend
 
