@@ -17,6 +17,9 @@ Název proměnné | Povinný       | Popis
 :------------- | :------------ | :---------
 seznam_zboziId | Ano | (int) ID provozovny, získáte v [administraci své provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu.
 seznam_orderId | Ano | (string, maximum 255 znaků) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
+seznam_zboziType | Ne | (string) "standard" = standardní měření konverzí (default); "limited" = omezené měření; "sandbox" = testovací režim standardního měření
+seznam_cId | Ne | (int) ID konverzního kódu Sklik, používá se pro měření konverzí v Skliku
+seznam_value | Ne | (int) Hodnota objednávky v Kč; pro měření konverzí v Skliku, standardní měření konverzí Zboží.cz ji nezohledňuje
 
 ### Konverzní JavaScript kód
 
@@ -26,7 +29,10 @@ Frontend kód by měl být na stránce zobrazující se po odeslání/potvrzení
 <script>
     var seznam_zboziId = ID_PROVOZOVNY; // ID provozovny na Zboží
     var seznam_orderId = "CISLO OBJEDNAVKY";  // Číslo objednávky
-    // var seznam_zboziType = "sandbox"; // zapnutí testovacího režimu
+    var seznam_zboziType = "standard"; // Typ měření konverzí Zboží.cz, pro testovací režim uvádějte "sandbox"
+    
+    var seznam_cId = SKLIK_ID; // ID konverzního kódu Skliku (pro měření konverzí i pro Sklik)
+    var seznam_value = HODNOTA_OBJEDNAVKY; // Hodnota objednávky v Kč (pro měření konverzí pro Sklik)
 </script>
 
 <script type="text/javascript" src="https://www.seznam.cz/rs/static/rc.js" async></script>
