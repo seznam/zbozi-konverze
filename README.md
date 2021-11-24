@@ -15,27 +15,36 @@ Všechny textové údaje musí být v kódování `utf-8`. Znaky nepatřící do
 
 Název proměnné | Povinný       | Popis
 :------------- | :------------ | :---------
-seznam_zboziId | Ano | (int) ID provozovny, získáte v [administraci své provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu.
-seznam_orderId | Ano | (string, maximum 255 znaků) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
-seznam_zboziType | Ne | (string) "standard" = standardní měření konverzí (default); "limited" = omezené měření; "sandbox" = testovací režim standardního měření
-seznam_cId | Ne | (int) ID konverzního kódu Sklik, používá se pro měření konverzí v Skliku
-seznam_value | Ne | (int) Hodnota objednávky v Kč; pro měření konverzí v Skliku, standardní měření konverzí Zboží.cz ji nezohledňuje
+zboziId | Ano | (int) ID provozovny, získáte v [administraci své provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu.
+orderId | Ano | (string, maximum 255 znaků) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
+zboziType | Ne | (string) "standard" = standardní měření konverzí (default); "limited" = omezené měření; "sandbox" = testovací režim standardního měření
+id | Ne | (int) ID konverzního kódu Sklik, používá se pro měření konverzí v Skliku
+value | Ne | (int) Hodnota objednávky v Kč; pro měření konverzí v Skliku, standardní měření konverzí Zboží.cz ji nezohledňuje
+consent | Ne | (int) Souhlas od návštěvníka na odeslání konverzního hitu, povolené hodnoty: 0 (není souhlas) ne 1 (je souhlas)
+
 
 ### Konverzní JavaScript kód
 
-Frontend kód by měl být na stránce zobrazující se po odeslání/potvrzení objednávky a jeho optimální umístění je do hlavičky stránky (před `</head>`) – volání skriptu je prováděno asynchronně, nezpomalí tak načítání jiných prvků na stránce. 
+Frontend kód by měl být na stránce zobrazující se po odeslání/potvrzení objednávky a jeho optimální umístění je do hlavičky stránky (před `</head>`). **Nevkládejte kód do stránky jako asynchronní s atributem async.**
 
 ```html
+<script type="text/javascript" src="https://c.seznam.cz/js/rc.js"></script>
 <script>
-    var seznam_zboziId = ID_PROVOZOVNY; // ID provozovny na Zboží
-    var seznam_orderId = "CISLO OBJEDNAVKY";  // Číslo objednávky
-    var seznam_zboziType = "standard"; // Typ měření konverzí Zboží.cz, pro testovací režim uvádějte "sandbox"
-    
-    var seznam_cId = SKLIK_ID; // ID konverzního kódu Skliku (pro měření konverzí i pro Sklik)
-    var seznam_value = HODNOTA_OBJEDNAVKY; // Hodnota objednávky v Kč (pro měření konverzí pro Sklik)
-</script>
+    var conversionConf = {
+        zboziId: ID_PROVOZOVNY, // ID provozovny na Zboží
+        orderId: "CISLO OBJEDNAVKY",  // Číslo objednávky
+        zboziType: "standard", // Typ měření konverzí Zboží.cz, pro testovací režim uvádějte "sandbo
+        
+        id: SKLIK_ID, // ID konverzního kódu Skliku (pro měření konverzí i pro Sklik)
+        value: HODNOTA_OBJEDNAVKY, // Hodnota objednávky v Kč (pro měření konverzí pro Sklik)
+        consent: SOUHLAS, // Souhlas od návštěvníka na odeslání konverzního hitu
+    };
 
-<script type="text/javascript" src="https://www.seznam.cz/rs/static/rc.js" async></script>
+    // Ujistěte se, že metoda existuje, předtím než ji zavoláte
+    if (window.rc && window.rc.conversionHit) {
+        window.rc.conversionHit(conversionConf);
+    }
+</script>
 ```
 
 ## Backend
