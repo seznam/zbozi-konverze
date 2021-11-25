@@ -22,6 +22,14 @@ id | Ne | (int) ID konverzního kódu Sklik, používá se pro měření konverz
 value | Ne | (int) Hodnota objednávky v Kč; pro měření konverzí v Skliku, standardní měření konverzí Zboží.cz ji nezohledňuje
 consent | Ne | (int) Souhlas od návštěvníka na odeslání konverzního hitu, povolené hodnoty: 0 (není souhlas) nebo 1 (je souhlas)
 
+#### Souhlas uživatele s měřením – consent (doporučené)
+
+Konverzní kód potřebuje od inzerenta informace, má-li od návštěvníka svého webu souhlas k tomu, aby ho mohl prostřednictvím cookies opětovně oslovovat v reklamní síti a aby ho mohl sledovat pro doměřování konverzí (zákon č. 127/2005 Sb., o elektronických komunikacích).
+
+Konverzní kód podporuje parametr consent, kterým inzerent předává Seznamu informaci, zda uživatel vyjádřil souhlas s cílenou reklamou nebo měřením konverzí. Pokud souhlas existuje (hodnota 1) nebo parametr není přiložen, Seznam.cz data zpracuje běžným způsobem vč. čtení cookies. Pokud souhlas není (hodnota 0), systém data zpracuje pro zpřesnění měření konverzí pomocí modelování, avšak v souladu se zákonem (neukládá ani nečte informace ze zařízení uživatele).
+
+Využitím parametru consent zajistíte nadále nejpřesnější možné měření konverzí v Skliku i Zboží.cz.
+
 
 ### Konverzní JavaScript kód
 
