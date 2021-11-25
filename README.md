@@ -20,7 +20,7 @@ orderId | Ano | (string, maximum 255 znaků) Číslo/kód objednávky vygenerova
 zboziType | Ne | (string) "standard" = standardní měření konverzí (default); "limited" = omezené měření; "sandbox" = testovací režim standardního měření
 id | Ne | (int) ID konverzního kódu Sklik, používá se pro měření konverzí v Skliku
 value | Ne | (int) Hodnota objednávky v Kč; pro měření konverzí v Skliku, standardní měření konverzí Zboží.cz ji nezohledňuje
-consent | Ne | (int) Souhlas od návštěvníka na odeslání konverzního hitu, povolené hodnoty: 0 (není souhlas) ne 1 (je souhlas)
+consent | Ne | (int) Souhlas od návštěvníka na odeslání konverzního hitu, povolené hodnoty: 0 (není souhlas) nebo 1 (je souhlas)
 
 
 ### Konverzní JavaScript kód
