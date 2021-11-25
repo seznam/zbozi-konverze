@@ -41,7 +41,7 @@ Frontend kód by měl být na stránce zobrazující se po odeslání/potvrzení
     var conversionConf = {
         zboziId: ID_PROVOZOVNY, // ID provozovny na Zboží
         orderId: "CISLO OBJEDNAVKY",  // Číslo objednávky
-        zboziType: "standard", // Typ měření konverzí Zboží.cz, pro testovací režim uvádějte "sandbo
+        zboziType: "standard", // Typ měření konverzí Zboží.cz, pro testovací režim uvádějte "sandbox"
         
         id: SKLIK_ID, // ID konverzního kódu Skliku (pro měření konverzí i pro Sklik)
         value: HODNOTA_OBJEDNAVKY, // Hodnota objednávky v Kč (pro měření konverzí pro Sklik)
