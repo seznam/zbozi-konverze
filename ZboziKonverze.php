@@ -258,11 +258,19 @@ class ZboziKonverze {
         if (array_key_exists("email", $orderAttributes) && $orderAttributes["email"]) {
             $this->email = $orderAttributes["email"];
         }
-        $this->deliveryType = $orderAttributes["deliveryType"];
-        $this->deliveryPrice = $orderAttributes["deliveryPrice"];
+        if (array_key_exists("deliveryType", $orderAttributes) && $orderAttributes["deliveryType"]) {
+            $this->deliveryType = $orderAttributes["deliveryType"];
+        }
+        if (array_key_exists("deliveryPrice", $orderAttributes) && $orderAttributes["deliveryPrice"]) {
+            $this->deliveryPrice = $orderAttributes["deliveryPrice"];
+        }
         $this->orderId = $orderAttributes["orderId"];
-        $this->otherCosts = $orderAttributes["otherCosts"];
-        $this->paymentType = $orderAttributes["paymentType"];
+        if (array_key_exists("otherCosts", $orderAttributes) && $orderAttributes["otherCosts"]) {
+            $this->otherCosts = $orderAttributes["otherCosts"];
+        }
+        if (array_key_exists("paymentType", $orderAttributes) && $orderAttributes["paymentType"]) {
+            $this->paymentType = $orderAttributes["paymentType"];
+        }
     }
 
 
