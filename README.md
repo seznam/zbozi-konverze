@@ -55,6 +55,16 @@ Frontend kód by měl být na stránce zobrazující se po odeslání/potvrzení
 </script>
 ```
 
+#### Nastavení Content Security Policy
+
+Používáte-li na webu omezení Content Security Policy, je nutné aby povolovala alespoň:
+
+* `script-src 'unsafe-inline' https://*.seznam.cz https://*.zbozi.cz;`
+* `img-src https://*.seznam.cz;`
+* `frame-src https://*.zbozi.cz;`
+
+`script-src 'unsafe-inline'` je nutné kvůli volání skriptu přímo z tagu `<script>`, pokud používáte jinou metodu vkládání kódů (např. GTM), ovlivní to i potřebná nastavení Content Security Policy.
+
 ## Backend
 
 ### Autentizace a autorizace
