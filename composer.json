@@ -1,0 +1,8 @@
+{
+    "name": "seznam/zbozi-konverze",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "classmap": ["ZboziKonverze.php"]
+    }
+}
