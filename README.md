@@ -18,9 +18,13 @@ Název proměnné | Povinný       | Popis
 zboziId | Ano | (int) ID provozovny, získáte v [administraci své provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu.
 orderId | Ano | (string, maximum 255 znaků) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
 zboziType | Ne | (string) "standard" = standardní měření konverzí (default); "limited" = omezené měření; "sandbox" = testovací režim standardního měření
+consent | Doporučený | (int) Souhlas od návštěvníka na odeslání konverzního hitu, povolené hodnoty: 0 (není souhlas) nebo 1 (je souhlas)
+eid | Doporučený | (string) E-mail zákazníka, lze posílat prostý text nebo hash, popis je [v dokumentaci identity (sekce Hashovaný email)](https://vyvojari.seznam.cz/identita/eid). Předávejte, jen máte-li výslovný souhlas zákazníka.
+aid | Doporučený | (objekt s adresou) Bydliště nebo poštovní adresa zákazníka. Posílejte, jen máte-li jeho výslovný souhlas. Obsahuje pole a1 až a6, popis je [v dokumentaci identity (sekce Adresa)](https://vyvojari.seznam.cz/identita/adresa).
+tid | Doporučený | (string) Telefonní číslo zákazníka, ve formátu +420724123456. Posílejte, jen máte-li jeho výslovný souhlas. Podrobný popis je [v dokumentaci identity (sekce Telefonní číslo)](https://vyvojari.seznam.cz/identita/telefon).
 id | Ne | (int) ID konverzního kódu Sklik, používá se pro měření konverzí v Skliku
 value | Ne | (int) Hodnota objednávky v Kč; pro měření konverzí v Skliku, standardní měření konverzí Zboží.cz ji nezohledňuje
-consent | Doporučený | (int) Souhlas od návštěvníka na odeslání konverzního hitu, povolené hodnoty: 0 (není souhlas) nebo 1 (je souhlas)
+
 
 #### Souhlas uživatele s měřením – consent
 
@@ -38,17 +42,31 @@ Frontend kód by měl být na stránce zobrazující se po odeslání/potvrzení
 ```html
 <script type="text/javascript" src="https://c.seznam.cz/js/rc.js"></script>
 <script>
+    /* nastavení objektu identity */
+    if (window.sznIVA && window.sznIVA.IS) {
+        window.sznIVA.IS.updateIdentities({
+            eid: "EMAIL_ZAKAZNIKA", // email či zahashovaný email
+            aid: {
+                "a1":"STAT", // stát
+                "a2":"MESTO", // město
+                "a3":"ULICE", // ulice
+                "a4":"CP", // číslo popisné
+                "a5":"PSC", // poštovní směrovací číslo
+            },
+            tid: "TELEFON", // telefonní číslo
+        });
+    }
+
     var conversionConf = {
         zboziId: ID_PROVOZOVNY, // ID provozovny na Zboží
         orderId: "CISLO OBJEDNAVKY",  // Číslo objednávky
         zboziType: "standard", // Typ měření konverzí Zboží.cz, pro testovací režim uvádějte "sandbox"
+        consent: SOUHLAS, // Souhlas od návštěvníka na odeslání konverzního hitu
         
         id: SKLIK_ID, // ID konverzního kódu Skliku (pro měření konverzí i pro Sklik)
         value: HODNOTA_OBJEDNAVKY, // Hodnota objednávky v Kč (pro měření konverzí pro Sklik)
-        consent: SOUHLAS, // Souhlas od návštěvníka na odeslání konverzního hitu
     };
-
-    // Ujistěte se, že metoda existuje, předtím než ji zavoláte
+    
     if (window.rc && window.rc.conversionHit) {
         window.rc.conversionHit(conversionConf);
     }
