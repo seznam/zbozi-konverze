@@ -116,7 +116,7 @@ quantity | Doporučený | (number) Počet zakoupených kusů. (1 – (2<sup>31</
 
 E-mailová adresa zákazníka může být předána ve dvou různých polích: `eid` v rámci identity (na front-endu), a `email` (na back-endu, v rámci informací o objednávce). Ačkoli obě pole typicky obsahují stejná data, jejich účel a smysl je odlišný:
 
-* `eid` je součástí identity pro měření konverzí, cílení reklamy a retargeting. Jeho zpracování je podmíněno souhlasem zákazníka s tímto účelem (["consent"](#souhlas-u%C5%BEivatele-s-m%C4%9B%C5%99en%C3%ADm--consent)), a e-mailovaná adresa může být předáván i hashovaná, resp. pokud není, je zahashovaná před dalším zpracováním.
+* `eid` je součástí identity pro měření konverzí, cílení reklamy a retargeting. Jeho zpracování je podmíněno souhlasem zákazníka s tímto účelem (["consent"](#souhlas-u%C5%BEivatele-s-m%C4%9B%C5%99en%C3%ADm--consent)), a e-mailovaná adresa může být předávána i hashovaná, resp. pokud není, je zahashovaná před dalším zpracováním.
 * `email` v rámci back-endové informace je používaný pro ověření spokojenosti s nákupem a hodnocení zakoupeného produktu. Obecnou praxí je, že pro tento účel stačí poskytnout zákazníkovu možnost opt-outu &ndash; to se typicky řeší checkboxem "Nesouhlasím s předáním údajů za účelem nezávislého hodnocení nákupu." v nákupním procesu. Zde adresa hashována být nesmí, protože na ní bude Zboží posílat e-maily.
 
 Tedy:
