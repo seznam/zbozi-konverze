@@ -18,8 +18,8 @@ Název proměnné | Povinný       | Popis
 zboziId | Ano | (int) ID provozovny, získáte v [administraci své provozovny](https://admin.zbozi.cz), případně na testovacím Sandboxu.
 orderId | Ano | (string, maximum 255 znaků) Číslo/kód objednávky vygenerovaný vaším e-shopem. Je třeba aby se shodovalo u frontend i backend konverzního kódu, aby mohly být údaje spojené.
 zboziType | Ne | (string) "standard" = standardní měření konverzí (default); "limited" = omezené měření; "sandbox" = testovací režim standardního měření
-consent | Doporučený | (int) Souhlas od návštěvníka na odeslání konverzního hitu, povolené hodnoty: 0 (není souhlas) nebo 1 (je souhlas)
-eid | Doporučený | (string) E-mail zákazníka, lze posílat prostý text nebo hash, popis je [v dokumentaci identity (sekce Hashovaný email)](https://vyvojari.seznam.cz/identita/eid). Předávejte, jen máte-li výslovný souhlas zákazníka.
+consent | Doporučený | (int) Souhlas od návštěvníka na odeslání konverzního hitu, povolené hodnoty: 0 (není souhlas) nebo 1 (je souhlas). Podrobnější informace o souhlasu [najdete níže](#souhlas-u%C5%BEivatele-s-m%C4%9B%C5%99en%C3%ADm--consent).
+eid | Doporučený | (string) E-mail zákazníka, lze posílat prostý text nebo hash, popis je [v dokumentaci identity (sekce Hashovaný email)](https://vyvojari.seznam.cz/identita/eid). Předávejte, jen máte-li výslovný souhlas zákazníka. Vizte též sekci [eid vs. email](#eid-vs-email).
 aid | Doporučený | (objekt s adresou) Bydliště nebo poštovní adresa zákazníka. Posílejte, jen máte-li jeho výslovný souhlas. Obsahuje pole a1 až a6, popis je [v dokumentaci identity (sekce Adresa)](https://vyvojari.seznam.cz/identita/adresa).
 tid | Doporučený | (string) Telefonní číslo zákazníka, ve formátu +420724123456. Posílejte, jen máte-li jeho výslovný souhlas. Podrobný popis je [v dokumentaci identity (sekce Telefonní číslo)](https://vyvojari.seznam.cz/identita/telefon).
 id | Ne | (int) ID konverzního kódu Sklik, používá se pro měření konverzí v Skliku
@@ -96,7 +96,7 @@ PRIVATE_KEY | Ano | (string, maximum 255 znaků) Tajný klíč využívaný výh
 Název proměnné | Povinný       | Popis
 :------------- | :------------ | :---------
 orderId | Ano | (string, maximum 255 znaků) Číslo objednávky vygenerované e-shopem. Je třeba, aby se shodovalo u dat zaslaných z frontendu i backendu, aby mohlo dojít k jejich spojení.
-email | Doporučený | (email, maximum 100 znaků) E-mail zákazníka. Může být využit pro ověření spokojenosti s nákupem a k žádosti o ohodnocení zakoupeného produktu. Nezasílat v případě, kdy zákazník neudělil souhlas s jeho poskytnutím.
+email | Doporučený | (email, maximum 100 znaků) E-mail zákazníka. Může být využit pro ověření spokojenosti s nákupem a k žádosti o ohodnocení zakoupeného produktu. Nezasílat v případě, kdy zákazník neudělil souhlas s jeho poskytnutím. Vizte též sekci [eid vs. email](#eid-vs-email).
 cart | Ano | (array) Obsah nákupního košíku.
 deliveryType | Doporučený | (string, maximum 100 znaků) Způsob dopravy, pokud možno [DELIVERY_ID z feedu](https://napoveda.seznam.cz/cz/zbozi/specifikace-xml-pro-obchody/specifikace-xml-feedu/#DELIVERY)
 deliveryPrice | Doporučený | (number) Cena dopravy v Kč včetně DPH. (Znaménkový 32bitový integer, 0 – (2<sup>31</sup>-1)/100.)
@@ -111,6 +111,17 @@ itemId | Ano | (string, maximum 255 znaků) ID položky v e-shopu (ITEM_ID z fee
 productName | Ano | (string, maximum 255 znaků) Název položky, ideálně PRODUCTNAME z feedu
 unitPrice | Doporučený | (number) Jednotková cena položky v Kč včetně DPH. (0 – (2<sup>31</sup>-1).)
 quantity | Doporučený | (number) Počet zakoupených kusů. (1 – (2<sup>31</sup>-1).)
+
+### eid vs. email
+
+E-mailová adresa zákazníka může být předána ve dvou různých polích: `eid` v rámci identity (na front-endu), a `email` (na back-endu, v rámci informací o objednávce). Ačkoli obě pole typicky obsahují stejná data, jejich účel a smysl je odlišný:
+
+* `eid` je součástí identity pro měření konverzí, cílení reklamy a retargeting. Jeho zpracování je podmíněno souhlasem zákazníka s tímto účelem (["consent"](#souhlas-u%C5%BEivatele-s-m%C4%9B%C5%99en%C3%ADm--consent)), a e-mailovaná adresa může být předáván i hashovaná, resp. pokud není, je zahashovaná před dalším zpracováním.
+* `email` v rámci back-endové informace je používaný pro ověření spokojenosti s nákupem a hodnocení zakoupeného produktu. Obecnou praxí je, že pro tento účel stačí poskytnout zákazníkovu možnost opt-outu &ndash; to se typicky řeší checkboxem "Nesouhlasím s předáním údajů za účelem nezávislého hodnocení nákupu." v nákupním procesu. Zde adresa hashována být nesmí, protože na ní bude Zboží posílat e-maily.
+
+Tedy:
+* `eid` posílejte, právě když máte od zákazníka souhlas s cílením a měřením reklamy
+* `email` posílejte, pokud vám zákazník nezakázal předávat údaje pro hodnocení nákupu
 
 ### PHP
 
