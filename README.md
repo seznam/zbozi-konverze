@@ -30,9 +30,7 @@ value | Ne | (int) Hodnota objednávky v Kč; pro měření konverzí v Skliku, 
 
 Konverzní kód potřebuje od inzerenta informace, má-li od návštěvníka svého webu souhlas k tomu, aby ho mohl prostřednictvím cookies opětovně oslovovat v reklamní síti a aby ho mohl sledovat pro doměřování konverzí (zákon č. 127/2005 Sb., o elektronických komunikacích).
 
-Konverzní kód podporuje parametr consent, kterým inzerent předává Seznamu informaci, zda uživatel vyjádřil souhlas s cílenou reklamou nebo měřením konverzí. Pokud souhlas existuje (hodnota 1) nebo parametr není přiložen, Seznam.cz data zpracuje běžným způsobem vč. čtení cookies. Pokud souhlas není (hodnota 0), systém data zpracuje pro zpřesnění měření konverzí pomocí modelování, avšak v souladu se zákonem (neukládá ani nečte informace ze zařízení uživatele).
-
-Využitím parametru consent zajistíte nadále nejpřesnější možné měření konverzí v Skliku i Zboží.cz.
+Informaci o objednávce odešlete i v případě, že tento souhlas nemáte – opačný přístup by zbytečně vyvolávat chyby při spojování konverzních dat, a znemožnil by vám u takových objednávek sbírat hodnocení zákazníků (to funguje nezávisle na cookies). K předání informace o souhlasu s cílenou reklamou a měřením konverzí využijte parametr `consent`. Pokud souhlas existuje (hodnota 1) nebo parametr není přiložen, Seznam.cz data zpracuje běžným způsobem vč. čtení cookies. Pokud souhlas není (hodnota 0), systém data zpracuje pro zpřesnění měření konverzí pomocí modelování, avšak v souladu se zákonem (neukládá ani nečte informace ze zařízení uživatele).
 
 
 ### Konverzní JavaScript kód
