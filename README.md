@@ -1,3 +1,5 @@
+* English version: [README.en.md](README.en.md)
+
 # Měření konverzí Zboží.cz
 
 Pro získání výhod spojených s měřením konverzí Zboží.cz, jakými jsou např. zjišťování spokojenosti zákazníků s nákupem nebo přístup ke statistikám výkonu přes API, je třeba zasílat informace z frontend měřícího kódu (JavaScript) i z vašeho backend rozhraní.
@@ -158,7 +160,7 @@ try {
         "unitPrice" => 5000.50,
     ));
 
-    // přidáni další zakoupené položky
+    // přidání další zakoupené položky
     $zbozi->addCartItem(array(
         "itemId" => "2468013579",
         "productName" => "BARUM QUARTARIS 165/70 R14 81 T",
@@ -198,7 +200,7 @@ Pro testování lze použít adresu `https://sandbox.zbozi.cz/action/TEST_ID/con
 
 Příklad requestu:
 
-```
+```http
 POST /action/ID PROVOZOVNY/conversion/backend HTTP/1.1
 Host: www.zbozi.cz
 Content-Length: 688
@@ -233,7 +235,7 @@ Content-Type: application/json
 
 #### HTTP GET
 
-Údaje o objednávce je možné poslat jako parametry GET requestu. Názvy parametrů jsou stejné jako v případě v JSONu. Jediný rozdíl je u parametru `cart`, který tvoří serializovaný řetězec z jeho atributů a hodnot oddělených středníkem (př.: productName:jmenoProduktu;itemId:idProduktu;unitPrice:100;quantity:3).
+Údaje o objednávce je možné poslat jako parametry GET requestu. Názvy parametrů jsou stejné jako v případě v JSONu. Jediný rozdíl je u parametru `cart`, který tvoří serializovaný řetězec z jeho atributů a hodnot oddělených středníkem (př.: `productName:jmenoProduktu;itemId:idProduktu;unitPrice:100;quantity:3`).
 
 Například
 
