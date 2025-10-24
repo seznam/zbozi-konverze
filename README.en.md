@@ -1,10 +1,10 @@
-# Zboží.cz Conversion Tracking
+# Seznam Nákupy Conversion Tracking
 
-To gain the benefits of Zboží.cz conversion tracking, such as determining customer satisfaction with their purchase, or accessing performance statistics via API, you need to send all the neccessary information both via the frontend tracking code (JavaScript) and your backend interface. 
+To gain the benefits of Seznam Nákupy conversion tracking, such as determining customer satisfaction with their purchase, or accessing performance statistics via API, you need to send all the neccessary information both via the frontend tracking code (JavaScript) and your backend interface. 
 
-The e-shop ID and a secret key are used for authentication and auhorization. You can obtain them in the [administration panel](https://admin.zbozi.cz), where you must also agree to the terms and conditions for conversion tracking and sign the data processing agreement. 
+The e-shop ID and a secret key are used for authentication and auhorization. You can obtain them in the [administration panel](https://prodejce.seznam.cz/), where you must also agree to the terms and conditions for conversion tracking and sign the data processing agreement. 
 
-You can use our testing environment – [Sandbox](http://sandbox.zbozi.cz), if you want to fine-tune and verify the functionality of your conversion tracking implementation. The [Zboží.cz guidebook](https://napoveda.zbozi.cz/en/conversion-code/standard-conversion-code/) is also available for you to use. 
+You can use our testing environment – [Sandbox](http://sandbox.zbozi.cz), if you want to fine-tune and verify the functionality of your conversion tracking implementation. The [guidebook](https://napoveda.sklik.cz/en/shopping-ads/conversion-code-zbozi-cz/#setting-standard) is also available for you to use. 
 
 
 ## Data Transmission
@@ -57,9 +57,9 @@ The frontend code should be placed on the page that is displayed right after the
         });
     }
     var conversionConf = {
-        zboziId: ESHOP_ID, // Zboží e-shop ID
+        zboziId: ESHOP_ID, // E-shop ID provided by Centrum prodejce
         orderId: "ORDER_NUMBER",  // Order number
-        zboziType: "standard", // Type of Zboží.cz conversion tracking; for testing mode, use "sandbox".
+        zboziType: "standard", // Type of Seznam nákupy conversion tracking; for testing mode, use "sandbox".
         consent: CONSENT, // Visitor’s consent for sending the conversion hit
         id: SKLIK_ID, // ID of the Sklik conversion code (used for conversion tracking in Sklik)
         value: ORDER_VALUE, // Order value in CZK (used for conversion tracking in Sklik)
@@ -98,7 +98,7 @@ If you are using Content Security Policy restrictions on your website, it is nec
 | **orderId**        | Yes          | (string, max. 255 characters) Order number/code from your e-shop. It must match in both the frontend and backend conversion code for data linkage. |
 | **email**          | Recommended  | (email, max. 100 characters) Customer’s e-mail, used for purchase verification and product review requests. Do not send if the customer has not given consent. |
 | **cart**           | Yes          | (array) Shopping cart contents. |
-| **deliveryType**   | Recommended  | (string, max. 100 characters) Delivery method, preferably the [DELIVERY_ID from your feed](https://napoveda.zbozi.cz/en/xml-feed-2/specification/#DELIVERY). |
+| **deliveryType**   | Recommended  | (string, max. 100 characters) Delivery method, preferably the [DELIVERY_ID from your feed](https://napoveda.sklik.cz/en/shopping-ads/xml-feed-shopping/specifications/#DELIVERY). |
 | **deliveryPrice**  | Recommended  | (number) Delivery price in CZK, including VAT. (Signed 32-bit integer, 0 – (2<sup>31</sup>-1)/100.) |
 | **otherCosts**     | Recommended  | (number) Additional costs or discounts for the order, e.g., card payment fees, bulk discounts. List discounts as negative numbers. (Signed 32-bit integer, -2<sup>31</sup>/100 – (2<sup>31</sup>-1)/100.) |
 | **paymentType**    | No           | (string, max. 100 characters) Payment type (e.g., card, cash, etc.). |
