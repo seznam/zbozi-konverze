@@ -32,7 +32,7 @@ Conversion code requires information from the advertiser on whether they have th
 
 You should send the order information even if you don’t have this consent – failing to do so would unnecessarily cause errors in linking conversion data and prevent you from collecting customer reviews for these orders (this works independently of cookies).
 
-To pass the consent information for targeted advertising and conversion tracking, use the `consent` parameter. If the consent was given (value `1`), or the parameter was not included, Seznam.cz processes the data in the standard way, including reading cookies. If the consent was not given (value `0`), the system processes the data for improving conversion tracking through modeling. This is done in compliance with the law (we neither store nor read the information from the user’s device).
+To pass the consent information for targeted advertising and conversion tracking, use the `consent` parameter. If the consent was given (value `1`), Seznam.cz processes the data in the standard way, including reading cookies. If the consent was not given (value `0`), or the parameter was not included, the system processes the data for improving conversion tracking through modeling. This is done in compliance with the law (we neither store nor read the information from the user’s device).
 
 
 ### Conversion JavaScript Code
