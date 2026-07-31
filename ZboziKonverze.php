@@ -312,10 +312,15 @@ class ZboziKonverze {
         }
 
         $decoded_response = json_decode($response, true);
+
+        if (!is_array($decoded_response) || !isset($decoded_response["status"])) {
+            throw new ZboziKonverzeException('Invalid response from ZboziKonverze service: ' . $response);
+        }
+
         if ((int)($decoded_response["status"] / 100) === 2) {
             return true;
         } else {
-            throw new ZboziKonverzeException('Request was not accepted: ' . $decoded_response['statusMessage']);
+            throw new ZboziKonverzeException('Request was not accepted: ' . (isset($decoded_response['statusMessage']) ? $decoded_response['statusMessage'] : $response));
         }
     }
 
