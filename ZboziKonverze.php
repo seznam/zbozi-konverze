@@ -57,6 +57,13 @@ class ZboziKonverze {
     const BASE_URL = 'https://%%DOMAIN%%/action/%%SHOP_ID%%/conversion/backend';
 
     /**
+     * Maximum length of a response body included in an exception message
+     *
+     * @var int RESPONSE_SNIPPET_LENGTH
+     */
+    const RESPONSE_SNIPPET_LENGTH = 512;
+
+    /**
      * Private identifier of request creator
      *
      * @var string $PRIVATE_KEY
@@ -313,14 +320,21 @@ class ZboziKonverze {
 
         $decoded_response = json_decode($response, true);
 
-        if (!is_array($decoded_response) || !isset($decoded_response["status"])) {
-            throw new ZboziKonverzeException('Invalid response from ZboziKonverze service: ' . $response);
+        // The body can be an arbitrarily large HTML error page from a proxy in front of
+        // the shop, and shops log or display these exceptions - keep the message bounded.
+        $response_snippet = substr((string)$response, 0, self::RESPONSE_SNIPPET_LENGTH);
+
+        if (!is_array($decoded_response) || !isset($decoded_response["status"]) || !is_numeric($decoded_response["status"])) {
+            throw new ZboziKonverzeException('Invalid response from ZboziKonverze service: ' . $response_snippet);
         }
 
         if ((int)($decoded_response["status"] / 100) === 2) {
             return true;
         } else {
-            throw new ZboziKonverzeException('Request was not accepted: ' . (isset($decoded_response['statusMessage']) ? $decoded_response['statusMessage'] : $response));
+            $message = isset($decoded_response['statusMessage'])
+                ? substr((string)$decoded_response['statusMessage'], 0, self::RESPONSE_SNIPPET_LENGTH)
+                : $response_snippet;
+            throw new ZboziKonverzeException('Request was not accepted: ' . $message);
         }
     }
 
